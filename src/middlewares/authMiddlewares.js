@@ -8,7 +8,7 @@ export async function userSignUpMdw (req, res, next){
     try{
         const userData = req.body;
         const validUserData = await authSignUpSchema.validateAsync(userData);
-        const {username, email, password} = validUserData;
+        const {username, password} = validUserData;
         const existUser = await usersCol.findOne( {$or:[
             {username},
             {password}
@@ -25,18 +25,23 @@ export async function userSignUpMdw (req, res, next){
 
 export async function userSignInMdw (req, res, next){
     const notFoundUserError = "This user does not exist"
+    const noMatchPassword = "Passwords don't match";
     try {
         const userData = req.body;
         const validUserData = await authSignInSchema.validateAsync(userData);
-        const {email} = validUserData;
+        const {email, password} = validUserData;
+
         const userExists = await usersCol.findOne({email});
         if (!userExists) throw notFoundUserError;
+
+        if (!bcrypt.compareSync(password, userExists.password)) throw noMatchPassword;
 
         res.locals.user = userExists;
 
         next();
     } catch ( err ) {
         if (err === notFoundUserError) res.status(400).send(err);
+        if (err === noMatchPassword) res.status(400).send(err);
         else res.status(400).send(err);
     }
 }
