@@ -5,7 +5,7 @@ import {v4 as uuid} from "uuid";
 export async function userSignUpCtrl (req, res) {
     const userData = res.locals.user;
     try{
-        await usersCol.insertOne(userData);
+        await usersCol.insertOne({...userData, artcoins: 0});
         res.sendStatus(201);
     } catch ( err ) {
         console.log( err );

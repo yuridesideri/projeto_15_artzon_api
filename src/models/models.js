@@ -8,5 +8,5 @@ export const authSignInSchema =  Joi.object().keys({
 
 
 export const authSignUpSchema = authSignInSchema.keys({
-    email: Joi.string().email().required()
+    username: Joi.string().min(5).required()
 });
