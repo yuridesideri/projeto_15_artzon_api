@@ -1,4 +1,4 @@
-import { usersCol } from "../database.js";
+import { sessionsCol, usersCol } from "../database.js";
 import bcrypt from "bcrypt";
 import { authSignInSchema, authSignUpSchema } from "../models/models.js";
 
@@ -44,4 +44,20 @@ export async function userSignInMdw (req, res, next){
         if (err === noMatchPassword) res.status(400).send(err);
         else res.status(400).send(err);
     }
+}
+
+export async function authenticateUser (req, res, next) {
+    const sessionError = "Session Expired"
+    const token = req.headers?.authentication?.replace('Bearer ', '');
+    try {
+        const {userId} = await sessionsCol.findOne(token);
+        if (!userId) throw sessionError;
+        const userData = await usersCol.findOne({_id: userId});
+        res.local.userdata = userData;
+        next()
+    } catch (err) {
+        if ( err === sessionError) res.status(400).send(err);
+        else res.status(400).send("Generic Error");
+    }
+    
 }
