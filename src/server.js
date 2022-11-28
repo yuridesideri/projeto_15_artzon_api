@@ -6,7 +6,7 @@ const server = express();
 server.use(express.json());
 server.use(cors());
 server.use(router);
-server.use(express.static('../public'));
+server.use(express.static('public'));
 
 
 

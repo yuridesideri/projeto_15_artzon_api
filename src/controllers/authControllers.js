@@ -30,3 +30,13 @@ export async function userSignInCtrl (req, res) {
         res.status(400).send(err);
     }
 }
+
+export async function getUserDataCtrl (req, res) {
+    try{
+        
+        const userData = res.locals.userdata;
+        res.status(200).send(userData);
+    } catch (err) {
+        res.status(400).send("Generic Error");
+    }
+}

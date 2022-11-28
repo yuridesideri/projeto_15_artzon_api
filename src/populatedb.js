@@ -11,6 +11,6 @@ function generateWallpaperPrice(max) {
 }
 
 for (let i = 0; i < wallpapersFiles.length; i++){
-    wallpapersCol.insertOne({wallpaperName: wallpapersFiles[i], wallpaperPrice: generateWallpaperPrice(MAX_WALLPAPER_PRICE), owners: []})
+    await wallpapersCol.insertOne({wallpaperName: wallpapersFiles[i], wallpaperPrice: generateWallpaperPrice(MAX_WALLPAPER_PRICE), owners: []})
 }
 

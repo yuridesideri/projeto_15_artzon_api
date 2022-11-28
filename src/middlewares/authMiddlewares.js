@@ -46,14 +46,14 @@ export async function userSignInMdw (req, res, next){
     }
 }
 
-export async function authenticateUser (req, res, next) {
+export async function authenticateUserMdw (req, res, next) {
     const sessionError = "Session Expired"
     const token = req.headers?.authentication?.replace('Bearer ', '');
     try {
-        const {userId} = await sessionsCol.findOne(token);
+        const {userId} = await sessionsCol.findOne({token});
         if (!userId) throw sessionError;
         const userData = await usersCol.findOne({_id: userId});
-        res.local.userdata = userData;
+        res.locals.userdata = userData;
         next()
     } catch (err) {
         if ( err === sessionError) res.status(400).send(err);
