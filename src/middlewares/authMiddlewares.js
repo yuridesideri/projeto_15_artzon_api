@@ -41,7 +41,7 @@ export async function userSignInMdw (req, res, next){
         next();
     } catch ( err ) {
         if (err === notFoundUserError) res.status(400).send(err);
-        if (err === noMatchPassword) res.status(400).send(err);
+        else if (err === noMatchPassword) res.status(400).send(err);
         else res.status(400).send(err);
     }
 }
